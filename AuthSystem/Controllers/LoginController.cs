@@ -42,7 +42,13 @@ namespace AuthSystem.Controllers
                     var identity = new ClaimsIdentity(direitosAcesso,"identity.Login");
                     var userPrincipal = new ClaimsPrincipal(new[] { identity });
 
-                    await HttpContext.SignInAsync(userPrincipal);
+                    await HttpContext.SignInAsync(userPrincipal,
+                        new AuthenticationProperties
+                        {
+                            IsPersistent = false,
+                            ExpiresUtc = DateTime.Now.AddHours(1)
+                        }
+                        );
 
                     return Json(new { Msg = "Usuário Logado com sucesso!"});
                 }
