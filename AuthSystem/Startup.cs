@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using AuthSystem.Data;
-using AuthSystem.Areas.Identity.Data;
-
-namespace AuthSystem
+﻿namespace AuthSystem
 {
     public class Startup
     {
@@ -12,7 +7,9 @@ namespace AuthSystem
             Configuration = configuration;
         }
         public IConfiguration Configuration
-        { get; }
+        {
+            get;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -24,7 +21,7 @@ namespace AuthSystem
                 {
                     config.Cookie.Name = "Identity.Login";
                     config.LoginPath = "/Login";
-                    config.AccessDeniedPath = "/HOme";
+                    config.AccessDeniedPath = "/Home";
                     config.ExpireTimeSpan = TimeSpan.FromHours(1);
                 });
 
@@ -53,7 +50,7 @@ namespace AuthSystem
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Login}/{action=Index}/{id?}");
 
             });
         }
