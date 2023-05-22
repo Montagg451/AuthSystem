@@ -1,13 +1,16 @@
-﻿using AuthSystem.Areas.Identity.Pages.Account;
+﻿using AuthSystem.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using System.Security.Claims;
+using System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AuthSystem.Controllers
 {
     public class LoginController : Controller
     {
+
+        
+
         public IActionResult Index()
         {
             return View();
@@ -20,8 +23,12 @@ namespace AuthSystem.Controllers
             {
                 if (ModelState.IsValid)
                 {
+
+                    if(loginModel.Login == "adm" && loginModel.Senha == "123" )
+
                     return RedirectToAction("Index", "Home");
                 }
+                TempData["MensagemErro"] = $"Usuário e/ou senha inválidos(s). Por favor tente novamente.";
 
                 return View("Index");
             }
