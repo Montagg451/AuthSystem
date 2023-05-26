@@ -23,9 +23,6 @@ namespace AuthSystem.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
-                    if(loginModel.Login == "adm" && loginModel.Senha == "123" )
-
                     return RedirectToAction("Index", "Home");
                 }
                 TempData["MensagemErro"] = $"Usuário e/ou senha inválidos(s). Por favor tente novamente.";
