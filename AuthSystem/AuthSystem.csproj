@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Startup.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="Views\Shared\_LoginPartial.cshtml" />
     <Content Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
   </ItemGroup>
