@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using AuthSystem.Data;
-using AuthSystem.Areas.Identity.Data;
-
-namespace AuthSystem
+﻿namespace AuthSystem
 {
     public class Startup
     {

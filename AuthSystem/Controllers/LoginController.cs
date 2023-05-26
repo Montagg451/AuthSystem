@@ -1,69 +1,43 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AuthSystem.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AuthSystem.Controllers
 {
     public class LoginController : Controller
     {
+
+        
+
         public IActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return Json(new { Msg = "Usuário já logado!" });
-            }
-
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logar(string username, string senha)
+        public IActionResult Entrar(LoginModel loginModel)
         {
-            MySqlConnection mySqlConnections = new MySqlConnection("server=localhost;database=usuariosdb;uid=root;password=3966458");
-            await mySqlConnections.OpenAsync();
-
-            MySqlCommand mySqlCommand = mySqlConnections.CreateCommand();
-            mySqlCommand.CommandText = $"Select * FROM usuarios WHERE username = '{username}'AND senha = '{senha}'";
-
-            MySqlDataReader reader = mySqlCommand.ExecuteReader();
-
-            if (await reader.ReadAsync())
+            try
             {
-                int usuarioId = reader.GetInt32(0);
-                string nome = reader.GetString(1);
+                if (ModelState.IsValid)
+                {
 
-                List<Claim> direitosAcesso = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier,usuarioId.ToString()),
-                        new Claim(ClaimTypes.Name,nome)
-                    };
+                    if(loginModel.Login == "adm" && loginModel.Senha == "123" )
 
-                var identity = new ClaimsIdentity(direitosAcesso, "identity.Login");
-                var userPrincipal = new ClaimsPrincipal(new[] { identity });
+                    return RedirectToAction("Index", "Home");
+                }
+                TempData["MensagemErro"] = $"Usuário e/ou senha inválidos(s). Por favor tente novamente.";
 
-                await HttpContext.SignInAsync(userPrincipal,
-                        new AuthenticationProperties
-                        {
-                            IsPersistent = false,
-                            ExpiresUtc = DateTime.Now.AddHours(1)
-                        }
-                        );
-
-                return Json(new { Msg = "Usuário Logado com sucesso!" });
+                return View("Index");
             }
-
-            return Json(new { Msg = "Usuário Não encontrado! verifique suas credenciais" });
-        }
-        public async Task<IActionResult> Logout()
-        {
-            if (User.Identity.IsAuthenticated)
+            catch (Exception erro)
             {
-                await HttpContext.SignOutAsync();
+                TempData["MensagemErro"] = $"Não conseguimos realizar seu login, tente novamente  {erro.Message}";
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index", "Login");
-        }
-    }
+            
+        }    
+    } 
 }
