@@ -1,40 +1,59 @@
-﻿using AuthSystem.Models;
+﻿
+using AuthSystem.Areas.Identity.Pages.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using MySql.Data.MySqlClient;
+
+using System.Security.Claims;
+
 
 namespace AuthSystem.Controllers
 {
     public class LoginController : Controller
     {
-
-        
-
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
 
+        // POST: /Account/Login
         [HttpPost]
-        public IActionResult Entrar(LoginModel loginModel)
+        public ActionResult Logar(Models.User user)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                TempData["MensagemErro"] = $"Usuário e/ou senha inválidos(s). Por favor tente novamente.";
+                // Conectar ao MySQL e verificar as credenciais do usuário
+                // Substitua os detalhes da conexão pelo seu próprio host, nome de usuário, senha, etc.
 
-                return View("Index");
+                // Exemplo de conexão MySQL usando a biblioteca MySql.Data
+                var connectionString = "server=localhost;uid=root;password=3966458;database=usuariosdb";
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    var query = "SELECT * FROM usuario WHERE Username = @username AND Password = @senha";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@username", user.Login);
+                        command.Parameters.AddWithValue("@password", user.Senha);
+
+                        var count = Convert.ToInt32(command.ExecuteScalar());
+
+                        if (count > 0)
+                        {
+                            // Autenticação bem-sucedida, redirecionar para a página inicial
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                }
+
+                ModelState.AddModelError("", "Invalid username or password.");
             }
-            catch (Exception erro)
-            {
-                TempData["MensagemErro"] = $"Não conseguimos realizar seu login, tente novamente  {erro.Message}";
-                return RedirectToAction("Index");
-            }
-            
-        }    
-    } 
+
+            // Se as credenciais forem inválidas ou ocorrer algum erro, retornar à página de login
+            return View(user);
+        }
+
+    }
+        
 }

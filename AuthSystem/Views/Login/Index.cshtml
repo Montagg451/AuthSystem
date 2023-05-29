@@ -1,9 +1,9 @@
-﻿@model LoginModel
+﻿@model AuthSystem.Models.User
 @{
     Layout = "_LayoutDeslogado";
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = " User ";
 }
-
+@using (Html.BeginForm("Index", "LoginController", FormMethod.Post))
 @if(TempData["MensagemErro"] != null)
 {
     <div class="arlet arlet-danger" role="alert">
@@ -15,7 +15,7 @@
 <div class="container">
     <div id="boxlogin">
         <div id="formcontrol">
-            <form asp-controller="Login" asp-action="Entrar" method="post">
+            <form asp-controller="Login" asp-action="Logar" method="post">
                 <div id="titlelogin">
                     <span>Login</span>
                     <hr class="labellogin" />
@@ -23,20 +23,20 @@
                 <div class="mb-3 labellogin">
                     <label for="login" class="form-label">Login</label>
                     <input type="text" asp-for=Login class="form-control" id="Login" />
-                    @Html.ValidationMessageFor(x =>x.Login)
+                     @Html.ValidationMessageFor(x => x.Login)
                 </div>
                 <div class="mb-3 labellogin">
                     <label for="senha" class="form-label">Senha</label>
                     <input type="password" asp-for=Senha class="form-control" id="senha" />
-                    @Html.ValidationMessageFor(x =>x.Senha)
+                    @Html.ValidationMessageFor(x => x.Senha)
                 </div>
-                <div class="mb-3" id="text">
+                @*<div class="mb-3" id="text">
                     <button type="button">Esqueci minha senha</button>
                 </div>
                 <div class="mb-3" id="text">
                     <button type="button">Criar Usuário </button>
-                </div>
-                <button type="submit" class="btn btn-primary labellogin">Entrar</button>
+                </div>*@
+                <button type="submit" value="Login" class="btn btn-primary labellogin">Entrar</button>
             </form>
         </div>
     </div>
