@@ -1,59 +1,63 @@
-﻿
-using AuthSystem.Areas.Identity.Pages.Account;
-using Microsoft.AspNetCore.Authentication;
+﻿using AuthSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
-
-using System.Security.Claims;
-
 
 namespace AuthSystem.Controllers
 {
     public class LoginController : Controller
     {
+       
+        // GET: Login
         public ActionResult Index()
         {
             return View();
         }
 
-        // POST: /Account/Login
         [HttpPost]
-        public ActionResult Logar(Models.User user)
+        public ActionResult Index(User user)
         {
-            if (ModelState.IsValid)
-            {
-                // Conectar ao MySQL e verificar as credenciais do usuário
-                // Substitua os detalhes da conexão pelo seu próprio host, nome de usuário, senha, etc.
+            // Defina as configurações de conexão com o MySQL
+            string connectionString = "server=localhost;port=3308;database=usuariosdb;uid=root;pwd=3966458;";
 
-                // Exemplo de conexão MySQL usando a biblioteca MySql.Data
-                var connectionString = "server=localhost;uid=root;password=3966458;database=usuariosdb";
-                using (var connection = new MySqlConnection(connectionString))
+            try
+            {
+                // Crie uma conexão com o MySQL
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
 
-                    var query = "SELECT * FROM usuario WHERE Username = @username AND Password = @senha";
-                    using (var command = new MySqlCommand(query, connection))
+                    // Consulta SQL para verificar as credenciais do usuário
+                    string query = "SELECT COUNT(*) FROM usuario WHERE Username = @username AND Senha = @senha";
+
+                    // Crie um comando SQL
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@username", user.Login);
-                        command.Parameters.AddWithValue("@password", user.Senha);
+                        command.Parameters.AddWithValue("@senha", user.Senha);
 
-                        var count = Convert.ToInt32(command.ExecuteScalar());
+                        int count = Convert.ToInt32(command.ExecuteScalar());
 
                         if (count > 0)
                         {
-                            // Autenticação bem-sucedida, redirecionar para a página inicial
+                            // Credenciais válidas, redirecionar para a página principal
                             return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            // Credenciais inválidas, exibir mensagem de erro na página de login
+                            ViewBag.ErrorMessage = "Credenciais inválidas. Por favor, tente novamente.";
+                            return View();
                         }
                     }
                 }
-
-                ModelState.AddModelError("", "Invalid username or password.");
             }
-
-            // Se as credenciais forem inválidas ou ocorrer algum erro, retornar à página de login
-            return View(user);
+            catch (Exception)
+            {
+                // Ocorreu um erro durante a conexão ou consulta
+                ViewBag.ErrorMessage = "Ocorreu um erro durante o login. Por favor, tente novamente mais tarde.";
+                return View();
+            }
         }
-
     }
-        
+
 }

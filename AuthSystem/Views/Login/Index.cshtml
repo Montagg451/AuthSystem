@@ -1,32 +1,33 @@
-﻿@model AuthSystem.Models.User
+﻿@using System.ComponentModel.DataAnnotations;
+@model User
 @{
-    Layout = "_LayoutDeslogado";
-    ViewData["Title"] = " User ";
+    Layout = "LayoutDeslogado";
+    ViewData["Title"] = " Login ";
 }
-@using (Html.BeginForm("Index", "LoginController", FormMethod.Post))
-@if(TempData["MensagemErro"] != null)
-{
-    <div class="arlet arlet-danger" role="alert">
-        <button type="button" class="btn btn-danger btn-sm close-arlet" data-bs-dismiss="Close">X</button>
-        @TempData["MensagemErro"]
-    </div>
-}
+
+@using (Html.BeginForm("Index", "Login", FormMethod.Post))
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
 
 <div class="container">
     <div id="boxlogin">
         <div id="formcontrol">
-            <form asp-controller="Login" asp-action="Logar" method="post">
+            <form asp-controller="Login" asp-action="Index" method="post">
                 <div id="titlelogin">
                     <span>Login</span>
                     <hr class="labellogin" />
                 </div>
                 <div class="mb-3 labellogin">
-                    <label for="login" class="form-label">Login</label>
+                    <label for="Login" class="form-label">Login</label>
                     <input type="text" asp-for=Login class="form-control" id="Login" />
                      @Html.ValidationMessageFor(x => x.Login)
                 </div>
                 <div class="mb-3 labellogin">
-                    <label for="senha" class="form-label">Senha</label>
+                    <label for="Senha" class="form-label">Senha</label>
                     <input type="password" asp-for=Senha class="form-control" id="senha" />
                     @Html.ValidationMessageFor(x => x.Senha)
                 </div>
@@ -36,7 +37,7 @@
                 <div class="mb-3" id="text">
                     <button type="button">Criar Usuário </button>
                 </div>*@
-                <button type="submit" value="Login" class="btn btn-primary labellogin">Entrar</button>
+                <button type="submit" class="btn btn-primary labellogin">Entrar</button>
             </form>
         </div>
     </div>
