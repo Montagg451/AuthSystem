@@ -27,7 +27,7 @@ namespace AuthSystem.Controllers
                     connection.Open();
 
                     // Consulta SQL para verificar as credenciais do usuário
-                    string query = "SELECT COUNT(*) FROM usuario WHERE Username = @username AND Senha = @senha";
+                    string query = "SELECT COUNT(*) FROM usuarios WHERE Username = @username AND Senha = @senha";
 
                     // Crie um comando SQL
                     using (MySqlCommand command = new MySqlCommand(query, connection))
