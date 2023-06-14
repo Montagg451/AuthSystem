@@ -1,4 +1,5 @@
 ﻿using AuthSystem.Areas.Identity.Data;
+using AuthSystem.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,4 +19,5 @@ public class AuthDbContext : IdentityDbContext<ApplicationUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+    public DbSet<UsuarioModel> usuarios { get; set; }
 }

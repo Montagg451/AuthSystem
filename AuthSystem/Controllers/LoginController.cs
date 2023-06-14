@@ -14,7 +14,7 @@ namespace AuthSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(User user)
+        public ActionResult Index(LoginModel model)
         {
             // Defina as configurações de conexão com o MySQL
             string connectionString = "server=localhost;port=3308;database=usuariosdb;uid=root;pwd=3966458;";
@@ -32,8 +32,8 @@ namespace AuthSystem.Controllers
                     // Crie um comando SQL
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@username", user.Login);
-                        command.Parameters.AddWithValue("@senha", user.Senha);
+                        command.Parameters.AddWithValue("@username", model.Login);
+                        command.Parameters.AddWithValue("@senha", model.Senha);
 
                         int count = Convert.ToInt32(command.ExecuteScalar());
 

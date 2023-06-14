@@ -2,7 +2,7 @@
 
 namespace AuthSystem.Models
 {
-    public class User
+    public class LoginModel
     {
         [Required(ErrorMessage = "O campo 'Login' é obrigatório.")]
         public string Login { get; set; }
